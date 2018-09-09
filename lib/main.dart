@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_flights/air_asia_bar.dart';
+import 'package:flutter_flights/content_card.dart';
 import 'package:flutter_flights/rounded_button.dart';
 
 void main() => runApp(new MyApp());
@@ -32,12 +33,12 @@ class _MyHomePageState extends State<MyHomePage> {
           AirAsiaBar(height: 210.0),
           Positioned.fill(
             child: new Padding(
-              padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).padding.top + 40),
+              padding:
+                  EdgeInsets.only(top: MediaQuery.of(context).padding.top + 40),
               child: new Column(
                 children: <Widget>[
                   _buildButtonsRow(),
-                  Container(), //TODO: Implement a card
+                  Expanded(child: ContentCard()),
                 ],
               ),
             ),
