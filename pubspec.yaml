@@ -63,3 +63,7 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.io/custom-fonts/#from-packages
+  fonts:
+    - family: NothingyouCouldDo
+      fonts:
+        - asset: assets/fonts/NothingYouCouldDo.ttf
