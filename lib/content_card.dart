@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_flights/multicity_input.dart';
 
 class ContentCard extends StatefulWidget {
   @override
@@ -66,8 +67,7 @@ class _ContentCardState extends State<ContentCard> {
   Widget _buildMulticityTab() {
     return Column(
       children: <Widget>[
-        Text("Inputs"), //TODO: Add multiCity input
-        Expanded(child: Container()),
+        Expanded(child: MulticityInput()),
         Padding(
           padding: const EdgeInsets.only(bottom: 16.0, top: 8.0),
           child: FloatingActionButton(
