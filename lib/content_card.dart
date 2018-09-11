@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_flights/multicity_input.dart';
+import 'flight_tab.dart';
 
 class ContentCard extends StatefulWidget {
   @override
@@ -7,6 +8,8 @@ class ContentCard extends StatefulWidget {
 }
 
 class _ContentCardState extends State<ContentCard> {
+  bool showInput = true;
+
   @override
   Widget build(BuildContext context) {
     return new Card(
@@ -57,7 +60,11 @@ class _ContentCardState extends State<ContentCard> {
             minHeight: viewportConstraints.maxHeight - 48.0,
           ),
           child: new IntrinsicHeight(
-            child: _buildMulticityTab(),
+            child: showInput
+                ? _buildMulticityTab()
+                : FlightTab(
+                    height: viewportConstraints.maxHeight - 48.0,
+                  ),
           ),
         ),
       ),
@@ -71,7 +78,7 @@ class _ContentCardState extends State<ContentCard> {
         Padding(
           padding: const EdgeInsets.only(bottom: 16.0, top: 8.0),
           child: FloatingActionButton(
-            onPressed: () {},
+            onPressed: () => setState(() => showInput = false),
             child: Icon(Icons.timeline, size: 36.0),
           ),
         ),
