@@ -64,6 +64,7 @@ class _ContentCardState extends State<ContentCard> {
                 ? _buildMulticityTab()
                 : FlightTab(
                     height: viewportConstraints.maxHeight - 48.0,
+                    onPlaneFlightStart: () => setState(() => showInput = false),
                   ),
           ),
         ),
