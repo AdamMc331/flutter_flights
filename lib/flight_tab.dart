@@ -19,6 +19,10 @@ class FlightTab extends StatefulWidget {
 }
 
 class _FlightTabState extends State<FlightTab> with TickerProviderStateMixin {
+  final List<GlobalKey<FlightStopCardState>> _stopKeys = [];
+  AnimationController _fabAnimationController;
+  Animation _fabAnimation;
+
   final List<FlightStop> _flightStops = [
     FlightStop("JFK", "ORY", "JUN 05", "6h 25m", "\$851", "9:26 am - 3:43 pm"),
     FlightStop("MRG", "FTB", "JUN 20", "6h 25m", "\$532", "9:26 am - 3:43 pm"),
@@ -56,6 +60,9 @@ class _FlightTabState extends State<FlightTab> with TickerProviderStateMixin {
     _initPlaneTravelAnimations();
     _initDotAnimationController();
     _initDotAnimations();
+    _initFabAnimationController();
+    _flightStops
+        .forEach((stop) => _stopKeys.add(new GlobalKey<FlightStopCardState>()));
     _planeSizeAnimationController.forward();
   }
 
@@ -129,7 +136,31 @@ class _FlightTabState extends State<FlightTab> with TickerProviderStateMixin {
 
   void _initDotAnimationController() {
     _dotsAnimationController = new AnimationController(
-        vsync: this, duration: Duration(milliseconds: 500));
+        vsync: this, duration: Duration(milliseconds: 500))
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          _animateFlightStopCards().then((_) => _animateFab());
+        }
+      });
+  }
+
+  Future _animateFlightStopCards() async {
+    return Future.forEach(_stopKeys, (GlobalKey<FlightStopCardState> stopKey) {
+      return new Future.delayed(Duration(milliseconds: 250), () {
+        stopKey.currentState.runAnimation();
+      });
+    });
+  }
+
+  void _initFabAnimationController() {
+    _fabAnimationController = new AnimationController(
+        vsync: this, duration: Duration(milliseconds: 300));
+    _fabAnimation = new CurvedAnimation(
+        parent: _fabAnimationController, curve: Curves.easeOut);
+  }
+
+  _animateFab() {
+    _fabAnimationController.forward();
   }
 
   @override
@@ -140,7 +171,8 @@ class _FlightTabState extends State<FlightTab> with TickerProviderStateMixin {
         alignment: Alignment.center,
         children: <Widget>[_buildPlane()]
           ..addAll(_flightStops.map(_buildStopCard))
-          ..addAll(_flightStops.map(_mapFlightStopToDot)),
+          ..addAll(_flightStops.map(_mapFlightStopToDot))
+          ..add(_buildFab()),
       ),
     );
   }
@@ -191,12 +223,26 @@ class _FlightTabState extends State<FlightTab> with TickerProviderStateMixin {
             isLeft ? Container() : Expanded(child: Container()),
             Expanded(
               child: FlightStopCard(
+                key: _stopKeys[index],
                 flightStop: stop,
                 isLeft: isLeft,
               ),
             ),
             !isLeft ? Container() : Expanded(child: Container()),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFab() {
+    return Positioned(
+      bottom: 16.0,
+      child: ScaleTransition(
+        scale: _fabAnimation,
+        child: FloatingActionButton(
+          onPressed: () {},
+          child: Icon(Icons.check, size: 36.0),
         ),
       ),
     );
